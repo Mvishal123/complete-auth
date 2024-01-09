@@ -16,8 +16,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ErrorMessage, SuccessMessage } from "@/components/StatusMessage";
+
+import { login } from "@/actions";
+import { useState, useTransition } from "react";
 
 const LoginForm = () => {
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,8 +33,20 @@ const LoginForm = () => {
     },
   });
 
+  const [isPending, startTransition] = useTransition();
+
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log("FORM SUBMITTED");
+    setIsError(false);
+    setIsSuccess(false);
+    startTransition(() => {
+      new Promise((resolve) =>
+        resolve(
+          setTimeout(() => {
+            login(values).then(() => setIsSuccess(true)).catch(() => setIsError(true));
+          }, 3000)
+        )
+      );
+    });
   };
   return (
     <CardWrapper
@@ -70,7 +89,9 @@ const LoginForm = () => {
               )}
             />
           </div>
-          <Button className="w-full" type="submit">
+          {isSuccess && <SuccessMessage label="Sign in successful" />}
+          {isError && <ErrorMessage label="invalid credentials" />}
+          <Button disabled={isPending} className="w-full" type="submit">
             Sign in
           </Button>
         </form>

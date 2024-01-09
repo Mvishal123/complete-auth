@@ -1,7 +1,10 @@
 "use server";
 
+import { db } from "@/lib/db";
 import { loginSchema, registerSchema } from "@/schemas";
+import { getUserByEmail } from "@/utils/data";
 import * as z from "zod";
+import bcrypt from "bcrypt";
 
 // to login an user
 export const login = async (values: z.infer<typeof loginSchema>) => {
@@ -10,6 +13,13 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
   if (!validateFields.success) {
     return {
       error: "Invalid credentials",
+    };
+  }
+
+  const user = await getUserByEmail(values.email);
+  if (!user) {
+    return {
+      error: "Account does not exist",
     };
   }
   return { success: "Email sent" };
@@ -24,6 +34,23 @@ export const register = async (values: z.infer<typeof registerSchema>) => {
       error: "Invalid credentials",
     };
   }
+
+  const user = await getUserByEmail(values.email);
+  if (user) {
+    return {
+      error: "Email already taken",
+    };
+  }
+
+  const hashedPassword = await bcrypt.hash(values.password, 10);
+  await db.user.create({
+    data: {
+      username: values.username,
+      password: hashedPassword,
+      email: values.email,
+    },
+  });
+
   return {
     success: "Email sent",
   };

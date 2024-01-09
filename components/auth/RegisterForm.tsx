@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { login } from "@/actions";
+import { register } from "@/actions/auth";
 import { Loader } from "lucide-react";
 import { useState, useTransition } from "react";
 
@@ -40,9 +40,10 @@ const RegisterForm = () => {
     setIsError("");
     setIsSuccess("");
     startTransition(() => {
-      login(values)
-        .then((res) => setIsSuccess(res.success))
-        .catch((res) => setIsError(res.error));
+      register(values).then((res) => {
+        setIsSuccess(res.success);
+        setIsError(res.error);
+      });
     });
   };
   return (

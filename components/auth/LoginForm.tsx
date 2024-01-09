@@ -1,29 +1,29 @@
 "use client";
 
+import { ErrorMessage, SuccessMessage } from "@/components/StatusMessage";
 import CardWrapper from "@/components/auth/CardWrapper";
-import { loginSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ErrorMessage, SuccessMessage } from "@/components/StatusMessage";
+import { loginSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import { login } from "@/actions";
+import { Loader } from "lucide-react";
 import { useState, useTransition } from "react";
 
 const LoginForm = () => {
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isError, setIsError] = useState<string | undefined>("");
+  const [isSuccess, setIsSuccess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -36,16 +36,12 @@ const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    setIsError(false);
-    setIsSuccess(false);
+    setIsError("");
+    setIsSuccess("");
     startTransition(() => {
-      new Promise((resolve) =>
-        resolve(
-          setTimeout(() => {
-            login(values).then(() => setIsSuccess(true)).catch(() => setIsError(true));
-          }, 3000)
-        )
-      );
+      login(values)
+        .then((res) => setIsSuccess(res.success))
+        .catch((res) => setIsError(res.error));
     });
   };
   return (
@@ -89,10 +85,11 @@ const LoginForm = () => {
               )}
             />
           </div>
-          {isSuccess && <SuccessMessage label="Sign in successful" />}
-          {isError && <ErrorMessage label="invalid credentials" />}
+          {isSuccess && <SuccessMessage label={isSuccess} />}
+          {isError && <ErrorMessage label={isError} />}
           <Button disabled={isPending} className="w-full" type="submit">
             Sign in
+            {isPending && <Loader className="h-4 w-4 animate-spin" />}
           </Button>
         </form>
       </Form>

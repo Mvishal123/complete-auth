@@ -1,10 +1,10 @@
-import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import { db } from "@/lib/db";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 import bcrypt from "bcryptjs";
 
 import { loginSchema } from "@/schemas";
-import { getUserByEmail } from "./utils/data";
+import { getUserByEmail } from "@/utils/data";
 
 export default {
   providers: [

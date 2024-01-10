@@ -4,7 +4,10 @@ import { db } from "@/lib/db";
 import { loginSchema, registerSchema } from "@/schemas";
 import { getUserByEmail } from "@/utils/data";
 import * as z from "zod";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { signIn } from "@/auth";
+import { LOGIN_REDIRECT_URL } from "@/routes";
+import { AuthError } from "next-auth";
 
 // to login an user
 export const login = async (values: z.infer<typeof loginSchema>) => {
@@ -22,6 +25,32 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
       error: "Account does not exist",
     };
   }
+
+  const { email, password } = validateFields.data;
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: LOGIN_REDIRECT_URL,
+    });
+
+    console.log("Sign in success");
+  } catch (error) {
+    console.log("ERROR:", error);
+
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials" };
+        default:
+          return { error: "Something went wrong" };
+      }
+    }
+
+    throw error;
+  }
+
   return { success: "Email sent" };
 };
 

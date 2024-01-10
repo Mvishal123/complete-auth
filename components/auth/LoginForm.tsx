@@ -38,10 +38,13 @@ const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     setIsError("");
     setIsSuccess("");
-    startTransition(() => {
+    startTransition(async () => {
       login(values).then((res) => {
-        setIsSuccess(res.success);
-        setIsError(res.error);
+        if(res.success){
+          setIsSuccess(res.success)
+        } else{
+          setIsError(res.error)
+        }
       });
     });
   };

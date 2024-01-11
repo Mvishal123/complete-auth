@@ -10,5 +10,5 @@ export const registerSchema = z.object({
   password: z
     .string()
     .min(5, { message: "Password should be a min of 5 characters long" }),
-  username: z.string().min(1, { message: "Username is required" }),
+  name: z.string().min(1, { message: "username is required" }),
 });

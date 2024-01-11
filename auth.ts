@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "@/auth.config";
 import { db } from "@/lib/db";
-import { Prisma, UserRole } from "@prisma/client";
+import { getUserById } from "./utils/data";
 
 export const {
   handlers: { GET, POST },
@@ -14,7 +14,8 @@ export const {
     async session({ session, token }) {
       if (session?.user && token.sub) {
         session.user.userId = token.sub;
-        session.user.role = "ADMIN" as const;
+        const dbUser = await getUserById(session.user.userId);
+        session.user.role = dbUser?.role ?? "USER";
       }
       console.log("SESSION:", { session });
 
@@ -27,5 +28,6 @@ export const {
 
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
+  debug: true,
   ...authConfig,
 });

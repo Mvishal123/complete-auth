@@ -14,7 +14,7 @@ export const {
     async session({ session, token }) {
       if (session?.user && token.sub) {
         session.user.userId = token.sub;
-        session.user.role = "ADMIN";
+        session.user.role = "ADMIN" as const;
       }
       console.log("SESSION:", { session });
 

@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { NOT_LOGIN_REDIRECT_URL } from "@/routes";
 
 const SettingsPage = async () => {
-  const user = await auth();
+  const session = await auth();
   return (
     <div>
-      {user ? <>{JSON.stringify(user)}</> : "no user"}
+      {session ? <>{JSON.stringify(session)}</> : "no user"}
+      
       <br />
       <br />
+      {session?.user.userId}
       <form
         action={async () => {
           "use server";

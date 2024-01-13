@@ -20,10 +20,19 @@ import * as z from "zod";
 import { login } from "@/actions/auth";
 import { Loader } from "lucide-react";
 import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const [isError, setIsError] = useState<string | undefined>("");
   const [isSuccess, setIsSuccess] = useState<string | undefined>("");
+
+  const searchParams = useSearchParams();
+  const OAuthError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Account already linked with another provider"
+      : "";
+      console.log("OAUTH", OAuthError);
+      
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -40,14 +49,15 @@ const LoginForm = () => {
     setIsSuccess("");
     startTransition(async () => {
       login(values).then((res) => {
-        if(res.success){
-          setIsSuccess(res.success)
-        } else{
-          setIsError(res.error)
+        if (res.success) {
+          setIsSuccess(res.success);
+        } else {
+          setIsError(res.error);
         }
       });
     });
   };
+
   return (
     <CardWrapper
       headerLabel="Welcome back"
@@ -90,7 +100,7 @@ const LoginForm = () => {
             />
           </div>
           {isSuccess && <SuccessMessage label={isSuccess} />}
-          {isError && <ErrorMessage label={isError} />}
+          {isError || OAuthError && <ErrorMessage label={isError ? isError : OAuthError} />}
           <Button disabled={isPending} className="w-full" type="submit">
             Sign in
             {isPending && <Loader className="h-4 w-4 animate-spin" />}

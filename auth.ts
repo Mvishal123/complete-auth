@@ -10,6 +10,10 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
   events: {
     linkAccount: async ({ user }) => {
       console.log("LINK ACCOUNT:", user);
@@ -41,6 +45,5 @@ export const {
 
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
-  debug: true,
   ...authConfig,
 });

@@ -10,6 +10,20 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  events: {
+    linkAccount: async ({ user }) => {
+      console.log("LINK ACCOUNT:", user);
+
+      await db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
   callbacks: {
     async session({ session, token }) {
       if (session?.user && token.sub) {
@@ -17,7 +31,6 @@ export const {
         const dbUser = await getUserById(session.user.userId);
         session.user.role = dbUser?.role ?? "USER";
       }
-      console.log("SESSION:", { session });
 
       return session;
     },

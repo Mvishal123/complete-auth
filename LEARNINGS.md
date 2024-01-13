@@ -6,7 +6,9 @@
 - E.g. `matcher: ["/dashboard"]` means that on the "/dashboard" route is protected by the middleware function
 
 ## next-auth (v5)
+
 ### 1. Credentials provider
+
 - #### Flow of callbacks
 
   > JWT -> Session
@@ -34,8 +36,8 @@ declare module "next-auth" {
 
 ### 2. Google and GitHub providers
 
-- We can Sign in without signing up with these providers. 
-Inorder to do this, we need to make password attribute optional in our database as people using these providers to sign in need not use password, instead directly sign in with google, github or other providers
+- We can Sign in without signing up with these providers.
+  Inorder to do this, we need to make password attribute optional in our database as people using these providers to sign in need not use password, instead directly sign in with google, github or other providers
 
-- 
-
+- #### 2FA
+  Google, GitHub and other providers already has 2FA and are secured. Therefore, we need to implement 2FA only for credentials provider if needed.

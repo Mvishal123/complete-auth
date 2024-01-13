@@ -74,7 +74,7 @@ export const register = async (values: z.infer<typeof registerSchema>) => {
   const hashedPassword = await bcrypt.hash(values.password, 10);
   await db.user.create({
     data: {
-      username: values.username,
+      name: values.name,
       password: hashedPassword,
       email: values.email,
     },

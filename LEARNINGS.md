@@ -57,3 +57,7 @@ declare module "next-auth" {
     @@unique([email, token]) // Only one token for a specific email
   }
   ```
+
+
+- #### Sign in protection
+  When using next-auth, whatever we do in backend to protect signing in, we need to do it in the `signIn()` callback provided by next-auth (auth.js now) to have complete protection

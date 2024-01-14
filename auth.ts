@@ -29,6 +29,19 @@ export const {
     },
   },
   callbacks: {
+    async signIn({ account, user }) {
+      // To check is the user is verified
+      if (account?.provider !== "credentials") return true; // google and github accounts are already verified
+
+      const existingUser = await db.user.findFirst({
+        where: {
+          id: user.id,
+        },
+      });
+
+      if (!existingUser || !existingUser.emailVerified) return false;
+      return true;
+    },
     async session({ session, token }) {
       if (session?.user && token.sub) {
         session.user.userId = token.sub;

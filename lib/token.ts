@@ -21,7 +21,7 @@ export const generateVerificationToken = async (email: string) => {
 
   const verificationToken = await db.verificationToken.update({
     where: {
-      token,
+      email,
     },
     data: {
       token,

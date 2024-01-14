@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { login } from "@/actions/auth";
+import { login } from "@/actions/login";
 import { Loader } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
@@ -31,8 +31,7 @@ const LoginForm = () => {
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Account already linked with another provider"
       : "";
-      console.log("OAUTH", OAuthError);
-      
+  console.log("OAUTH", OAuthError);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -100,7 +99,8 @@ const LoginForm = () => {
             />
           </div>
           {isSuccess && <SuccessMessage label={isSuccess} />}
-          {isError || OAuthError && <ErrorMessage label={isError ? isError : OAuthError} />}
+          {isError && <ErrorMessage label={isError} />}
+          {OAuthError && <ErrorMessage label={OAuthError} />}
           <Button disabled={isPending} className="w-full" type="submit">
             Sign in
             {isPending && <Loader className="h-4 w-4 animate-spin" />}

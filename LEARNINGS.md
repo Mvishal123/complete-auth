@@ -47,6 +47,7 @@ declare module "next-auth" {
 - #### Token schema (db)
 
   ```typescript
+  // no need to create a relation with the User model
   model VerificationToken {
     id  String @id @default(cuid())
     email String

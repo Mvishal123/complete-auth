@@ -1,13 +1,11 @@
 "use server";
 
-import { db } from "@/lib/db";
-import { loginSchema, registerSchema } from "@/schemas";
-import { getUserByEmail } from "@/utils/data";
-import * as z from "zod";
-import bcrypt from "bcryptjs";
 import { signIn } from "@/auth";
 import { LOGIN_REDIRECT_URL } from "@/routes";
+import { loginSchema } from "@/schemas";
+import { getUserByEmail } from "@/utils/data";
 import { AuthError } from "next-auth";
+import * as z from "zod";
 
 // to login an user
 export const login = async (values: z.infer<typeof loginSchema>) => {
@@ -52,35 +50,4 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
   }
 
   return { success: "Email sent" };
-};
-
-// to register an user
-export const register = async (values: z.infer<typeof registerSchema>) => {
-  const validateFields = registerSchema.safeParse(values);
-
-  if (!validateFields) {
-    return {
-      error: "Invalid credentials",
-    };
-  }
-
-  const user = await getUserByEmail(values.email);
-  if (user) {
-    return {
-      error: "Email already taken",
-    };
-  }
-
-  const hashedPassword = await bcrypt.hash(values.password, 10);
-  await db.user.create({
-    data: {
-      name: values.name,
-      password: hashedPassword,
-      email: values.email,
-    },
-  });
-
-  return {
-    success: "Email sent",
-  };
 };

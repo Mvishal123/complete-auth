@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { register } from "@/actions/auth";
+import { register } from "@/actions/register";
 import { Loader } from "lucide-react";
 import { useState, useTransition } from "react";
 
@@ -28,7 +28,7 @@ const RegisterForm = () => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "",  
+      email: "",
       password: "",
       name: "",
     },

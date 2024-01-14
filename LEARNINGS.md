@@ -41,3 +41,18 @@ declare module "next-auth" {
 
 - #### 2FA
   Google, GitHub and other providers already has 2FA and are secured. Therefore, we need to implement 2FA only for credentials provider if needed.
+
+### Email verification
+
+- #### Token schema (db)
+
+  ```typescript
+  model VerificationToken {
+    id  String @id @default(cuid())
+    email String
+    token String @unique
+    expires DateTime
+
+    @@unique([email, token]) // Only one token for a specific email
+  }
+  ```

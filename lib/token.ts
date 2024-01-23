@@ -19,6 +19,7 @@ export const generateVerificationToken = async (email: string) => {
     return verificationToken;
   }
 
+  // updating verification token if already exists
   const verificationToken = await db.verificationToken.update({
     where: {
       email,

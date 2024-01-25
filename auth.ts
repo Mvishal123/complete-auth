@@ -40,6 +40,7 @@ export const {
       });
 
       if (!existingUser || !existingUser.emailVerified) return false;
+
       return true;
     },
     async session({ session, token }) {

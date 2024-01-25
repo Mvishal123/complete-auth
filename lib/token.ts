@@ -1,7 +1,38 @@
-import { getVerificationTokenByEmail } from "@/utils/verificaton-token";
 import { db } from "@/lib/db";
-import { getUserByEmail } from "@/utils/data";
 import { getResetPasswordTokenByEmail } from "@/utils/reset-password-token";
+import { getTwoFactorTokenByEmail } from "@/utils/two-factor-auth-token";
+import { getVerificationTokenByEmail } from "@/utils/verificaton-token";
+import crypto from "crypto";
+
+export const generateTwoFactorVerificationToken = async (email: string) => {
+  const token = crypto.randomInt(100_000, 1_000_000).toString();
+  const expires = new Date(new Date().getTime() + 15 * 1000 * 60); //expires in 15mins
+
+  const existingToken = await getTwoFactorTokenByEmail(email);
+  if (!existingToken) {
+    await db.twoFactorToken.create({
+      data: {
+        email,
+        token,
+        expires,
+      },
+    });
+
+    return token;
+  }
+
+  await db.twoFactorToken.update({
+    data: {
+      token,
+      expires,
+    },
+    where: {
+      email,
+    },
+  });
+
+  return token;
+};
 
 export const generateVerificationToken = async (email: string) => {
   const token = crypto.randomUUID();

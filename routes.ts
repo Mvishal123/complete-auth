@@ -23,7 +23,13 @@ export const privateRoutes = ["/settings", "/dashboard"];
  * Accessible when not Authorized
  * @type {String[]}
  */
-export const authRoutes = ["/auth/login", "auth/register", "/auth/error"];
+export const authRoutes = [
+  "/auth/login",
+  "auth/register",
+  "/auth/error",
+  "auth/reset-password/*",
+  "/auth/verify/*",
+];
 
 export const NOT_LOGIN_REDIRECT_URL = "/auth/login";
 export const LOGIN_REDIRECT_URL = "/settings";

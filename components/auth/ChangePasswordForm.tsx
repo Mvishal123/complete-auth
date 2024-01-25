@@ -12,43 +12,52 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { resetPasswordMailSchema } from "@/schemas";
+import { resetPasswordSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { sendResetPasswordMail } from "@/lib/mail";
-import { generateResetPasswordToken } from "@/lib/token";
+import { resetPassword } from "@/actions/reset-password";
 import { Loader } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
-import { sendResetMail } from "@/actions/reset-password";
 
-const ResetPasswordForm = () => {
+const ChangePasswordForm = () => {
   const [isError, setIsError] = useState<string | undefined>("");
   const [isSuccess, setIsSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof resetPasswordMailSchema>>({
-    resolver: zodResolver(resetPasswordMailSchema),
+  const searchParams = useSearchParams();
+  const token = searchParams.get("new_token");
+
+  const form = useForm<z.infer<typeof resetPasswordSchema>>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      cpassword: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof resetPasswordMailSchema>) => {
+  const onSubmit = (values: z.infer<typeof resetPasswordSchema>) => {
     setIsError("");
     setIsSuccess("");
-    startTransition(async () => {
-      sendResetMail(values.email).then((res) => {
-        setIsError(res.error);
-        setIsSuccess(res.success);
+
+    startTransition(() => {
+      if (values.cpassword !== values.password) {
+        setIsError("Passwords must match");
+        return;
+      }
+
+      resetPassword(token!, values.password).then((data) => {
+        setIsError(data.error);
+        setIsSuccess(data.success);
       });
     });
   };
 
   return (
     <CardWrapper
-      headerLabel="Reset password"
+      headerLabel="Change your password"
       backButtonHref="/auth/login"
       backButtonLabel="Back to login page"
     >
@@ -57,28 +66,39 @@ const ResetPasswordForm = () => {
           <div className="space-y-6">
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="wayne.bruce@gmail.com"
-                      {...field}
-                      type="email"
-                    />
+                    <Input placeholder="******" {...field} type="password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cpassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="******" {...field} type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-
           {isSuccess && <SuccessMessage label={isSuccess} />}
           {isError && <ErrorMessage label={isError} />}
-
-          <Button disabled={isPending} className="w-full" type="submit">
-            Send email
+          <Button
+            disabled={form.formState.isLoading}
+            className="w-full"
+            type="submit"
+          >
+            Change password
             {isPending && <Loader className="h-4 w-4 animate-spin" />}
           </Button>
         </form>
@@ -87,4 +107,4 @@ const ResetPasswordForm = () => {
   );
 };
 
-export default ResetPasswordForm;
+export default ChangePasswordForm;

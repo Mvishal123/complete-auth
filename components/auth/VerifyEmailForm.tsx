@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CardWrapper from "./CardWrapper";
 import { useSearchParams } from "next/navigation";
 
@@ -15,9 +15,7 @@ const VerifyEmailForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("new_token");
 
-  useEffect(() => {
-    console.log("TOKEN: " + token);
-
+  const onSubmit = useCallback(() => {
     if (!token) {
       setError("Token not found");
       return;
@@ -28,6 +26,10 @@ const VerifyEmailForm = () => {
         setSuccess(res.success), setError(res.error);
       })
       .catch(() => setError("Something went wrong"));
+  }, [token]);
+
+  useEffect(() => {
+    onSubmit();
   }, [token]);
 
   return (

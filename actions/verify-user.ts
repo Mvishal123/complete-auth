@@ -3,15 +3,8 @@
 import { db } from "@/lib/db";
 import { getUserByEmail } from "@/utils/data";
 import { getVerificationTokenByToken } from "@/utils/verificaton-token";
-import email from "next-auth/providers/email";
 
 const verifyUser = async (token: string) => {
-  if (!token) {
-    return {
-      error: "no token found",
-    };
-  }
-
   const isToken = await getVerificationTokenByToken(token);
   if (!isToken)
     return {
@@ -44,6 +37,13 @@ const verifyUser = async (token: string) => {
     data: {
       emailVerified: new Date(),
       email: isUser.email,
+    },
+  });
+
+  await db.verificationToken.delete({
+    where: {
+      email: isUser.email,
+      token: token,
     },
   });
 

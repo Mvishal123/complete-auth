@@ -16,7 +16,7 @@ export const publicRoutes = ["/"];
  * Authetication is required!
  * @type {String[]}
  */
-export const privateRoutes = ["/settings", "/dashboard"];
+export const privateRoutes = ["/settings", "/admin", "/server", "/client"];
 
 /**
  * These are routes required for authentication

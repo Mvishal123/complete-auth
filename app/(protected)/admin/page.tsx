@@ -45,7 +45,7 @@ const Adminpage = () => {
         <h1 className="text-center text-2xl font-bold">🔑Admin</h1>
       </CardHeader>
       <CardContent>
-        <div className="w-full flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2">
           <Rolegate currentRole={userRole!} allowedRole="ADMIN">
             <SuccessMessage label="You have admin privelages" />
           </Rolegate>

@@ -41,7 +41,9 @@ export const updateSettings = async (
     values.role = undefined;
   }
 
-  if (values.email) {
+// Change email
+  const hasEmailChanged = (values.email !== existingUser.email) as boolean
+  if (values.email && hasEmailChanged) {
     const existingEmail = await db.user.findFirst({
       where: {
         email: values.email,
@@ -76,6 +78,8 @@ export const updateSettings = async (
       success: "Verification mail sent",
     };
   }
+
+//   Change password
 
   //   TODO: hash password
   const user = await db.user.update({

@@ -67,7 +67,8 @@ const SettingsPage = () => {
             setError(res.error);
           }
         })
-        .catch(() => setError("Something went wrong"));
+        .catch(() => setError("Something went wrong"))
+        .finally(() => form.reset());
     });
   };
 
@@ -169,9 +170,13 @@ const SettingsPage = () => {
                 <FormItem className="mt-2">
                   <FormLabel>Role</FormLabel>
                   <FormControl>
-                    <Select {...field}>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      disabled={isPending}
+                    >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={session?.role} />
+                        <SelectValue placeholder="Select a role" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>

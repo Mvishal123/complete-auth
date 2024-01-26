@@ -1,26 +1,14 @@
-import { auth, signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
-import { NOT_LOGIN_REDIRECT_URL } from "@/routes";
+"use client";
 
-const SettingsPage = async () => {
-  const session = await auth();
+import { Card } from "@/components/ui/card";
+import { getClientSession } from "@/hooks/client-session";
+
+const SettingsPage = () => {
+  const session = getClientSession();
+
   return (
     <div>
-      {session ? <>{JSON.stringify(session)}</> : "no user"}
-      
-      <br />
-      <br />
-      {session?.user.userId}
-      <form
-        action={async () => {
-          "use server";
-          await signOut({
-            redirectTo: NOT_LOGIN_REDIRECT_URL
-          });
-        }}
-      >
-        <Button>Log out</Button>
-      </form>
+      <Card></Card>
     </div>
   );
 };

@@ -33,12 +33,10 @@ export const updateSettings = async (
   }
 
   if (session.isOauth) {
-    values.name = undefined;
     values.email = undefined;
     values.password = undefined;
     values.newPassword = undefined;
     values.twoFactorEnabled = undefined;
-    values.role = undefined;
   } // because OAUTH accounts are already 2FA verified
 
   // Change email

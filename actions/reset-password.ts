@@ -3,7 +3,6 @@
 import { db } from "@/lib/db";
 import { sendResetPasswordMail } from "@/lib/mail";
 import { generateResetPasswordToken } from "@/lib/token";
-import { resetPasswordSchema } from "@/schemas";
 import { getUserByEmail } from "@/utils/data";
 import { getResetPasswordTokenByToken } from "@/utils/reset-password-token";
 import bcrypt from "bcryptjs";

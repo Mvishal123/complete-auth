@@ -48,31 +48,31 @@ export const settingsSchema = z
     role: z.optional(z.enum([UserRole.ADMIN, UserRole.USER])),
     twoFactorEnabled: z.optional(z.boolean()),
   })
-  // .refine(
-  //   (values) => {
-  //     if (values.password && !values.newPassword) {
-  //       return false;
-  //     }
-  //     return true;
-  //   },
-  //   { message: "Enter a new password to change", path: ["newPassword"] }
-  // )
-  // .refine(
-  //   (values) => {
-  //     if (!values.password && values.newPassword) {
-  //       return false;
-  //     }
-  //     return true;
-  //   },
-  //   { message: "Enter the password", path: ["password"] }
-  // )
-  // .refine(
-  //   (values) => {
-  //     if (values.password === values.newPassword) {
-  //       return false;
-  //     }
+  .refine(
+    (values) => {
+      if (values.password && !values.newPassword) {
+        return false;
+      }
+      return true;
+    },
+    { message: "Enter a new password to change", path: ["newPassword"] }
+  )
+  .refine(
+    (values) => {
+      if (values.newPassword && !values.password) {
+        return false;
+      }
+      return true;
+    },
+    { message: "Enter the password", path: ["password"] }
+  )
+  .refine(
+    (values) => {
+      if (values.password && values.newPassword && (values.password === values.newPassword)) {
+        return false;
+      }
 
-  //     return true;
-  //   },
-  //   { message: "Passwords must not match", path: ["newPassword"] }
-  // );
+      return true;
+    },
+    { message: "Passwords must not match", path: ["newPassword"] }
+  );

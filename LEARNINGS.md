@@ -61,6 +61,57 @@ declare module "next-auth" {
 - #### Sign in protection
   When using next-auth, whatever we do in backend to protect signing in, we need to do it in the `signIn()` callback provided by next-auth (auth.js now) to have complete protection
 
+<hr />
+
+### Advanced Authentication
+
+#### 1. Email verification
+
+- generate a `token` and store it database
+
+  ```ts
+   //Example schema (Prisma ORM)
+   model VerificationToken {
+  id      String   @id @default(cuid())
+  token   String   @unique
+  email   String   @unique
+  expires DateTime
+
+  @@unique([token, email])
+  }
+  ```
+
+- Send an email along with the token like `Click here to verify`
+
+  - When clicked redirect to a `verify-page` which has the token in it's query-params
+
+- Now get the token from URL and perform a check if it is present in the database and the email matches.
+
+  - **YES**: Email verified successfully
+  - **NO**: INVALID TOKEN
+
+- Also keep a check of `expires` to make the application more secured
+
+### 2. Reset password
+
+- Send and email to the given email along with a `code`
+- Store the code in the database in a similar manner
+- The `link` in the mail redirects to a reset-password page. Reset the password and update it in Database
+
+### 3. Two Factor Authentication (2FA)
+
+- It has to enabled by the user. It is `OFF` by default.
+- When it's `ON` the user can't just login directly, when he signs in, a mail is sent to the respective email.
+- The mail has a code which we have to enter in the 2FA confirmation input, then we can sign in
+
+- **Steps**
+  1. Similar to other authentication practices, generate a `2FA token` and store it in the database.
+  2. Also send the code in the email.
+  3. The user then enters the code from the mail to the 2FA dialog and then if it matches, the user can login.
+  4. Keep track of the expiry time to maintain best security practices
+
+<hr />
+
 ### Updating Session in real time
 
 - #### Server session
@@ -127,3 +178,7 @@ declare module "next-auth" {
     //fetch to db and change data...
     .then(() => update())
   ```
+
+```
+
+```

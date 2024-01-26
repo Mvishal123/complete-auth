@@ -40,6 +40,7 @@ const Navbar = () => {
                   key={id}
                   size="sm"
                   variant={pathname !== item.href ? "ghost" : "default"}
+                  asChild
                 >
                   <Link href={item.href}>{item.label}</Link>
                 </Button>

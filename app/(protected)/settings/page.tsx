@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { getClientSession } from "@/hooks/client-session";
+import { getClientSession } from "@/lib/client-session";
 
 const SettingsPage = () => {
   const session = getClientSession();

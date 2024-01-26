@@ -11,7 +11,7 @@ const layout = async ({ children }: LayoutProps) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="h-full w-full flex justify-center items-center bg-gradient-to-r from-rose-100 to-teal-100">
+      <div className="h-full w-full flex flex-col justify-center items-center bg-gradient-to-r from-rose-100 to-teal-100 gap-6">
         <Navbar />
         {children}
       </div>

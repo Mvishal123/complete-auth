@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getClientSession } from "@/hooks/client-session";
+import { getClientSession } from "@/lib/client-session";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProfileButton from "./profile-button";
@@ -31,7 +31,7 @@ const Navbar = () => {
   ];
   return (
     <>
-      <Card className="max-w-4xl bg-white w-full py-3.5 px-5 flex justify-between items-center">
+      <Card className="max-w-2xl bg-white w-full py-3.5 px-5 flex justify-between items-center">
         <div>
           <div className="md:space-x-6 space-x-3">
             {NAV_LINKS.map((item, id) => {

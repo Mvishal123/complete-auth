@@ -39,10 +39,10 @@ export const updateSettings = async (
     values.newPassword = undefined;
     values.twoFactorEnabled = undefined;
     values.role = undefined;
-  }
+  } // because OAUTH accounts are already 2FA verified
 
-// Change email
-  const hasEmailChanged = (values.email !== existingUser.email) as boolean
+  // Change email
+  const hasEmailChanged = (values.email !== existingUser.email) as boolean;
   if (values.email && hasEmailChanged) {
     const existingEmail = await db.user.findFirst({
       where: {
@@ -79,9 +79,24 @@ export const updateSettings = async (
     };
   }
 
-//   Change password
+  //   Change password
+  if (values.password && values.newPassword) {
+    const isPasswordMatch = await bcrypt.compare(
+      values.password,
+      existingUser.password!
+    );
 
-  //   TODO: hash password
+    if (!isPasswordMatch) {
+      return {
+        error: "Password incorrect",
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash(values.newPassword!, 10);
+    values.password = hashedPassword;
+    values.newPassword = undefined;
+  }
+
   const user = await db.user.update({
     data: {
       ...values,

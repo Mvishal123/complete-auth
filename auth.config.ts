@@ -1,4 +1,5 @@
-import { type AuthConfig } from "@auth/core";
+import type { NextAuthConfig } from "next-auth";
+
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import bcrypt from "bcryptjs";
@@ -6,8 +7,8 @@ import bcrypt from "bcryptjs";
 import { loginSchema } from "@/schemas";
 import { getUserByEmail } from "@/utils/data";
 
-import Google from "@auth/core/providers/google";
-import GitHub from "@auth/core/providers/github";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
 export default {
   providers: [
@@ -40,4 +41,4 @@ export default {
       },
     }),
   ],
-} satisfies AuthConfig;
+} satisfies NextAuthConfig;

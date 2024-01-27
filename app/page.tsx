@@ -21,7 +21,7 @@ export default function Home() {
         A complete authentication system
       </h3>
       <div className="mt-12">
-        <LoginButton asChild mode="redirect">
+        <LoginButton asChild mode="modal">
           <Button variant="default" size="lg" className="font-bold">
             Sign in
           </Button>

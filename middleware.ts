@@ -34,6 +34,10 @@ export default auth((req) => {
     return NextResponse.redirect(new URL(LOGIN_REDIRECT_URL, nextUrl));
   }
 
+  if (isPublicRoute && isLoggedIn) {
+    return NextResponse.redirect(new URL(LOGIN_REDIRECT_URL, nextUrl));
+  }
+
   if (isPublicRoute) return null;
 
   return null;

@@ -3,6 +3,16 @@
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import LoginForm from "./auth/LoginForm";
+
 interface LoginButtonProps {
   children: ReactNode;
   asChild?: boolean;
@@ -16,7 +26,14 @@ const LoginButton = ({ children, asChild, mode }: LoginButtonProps) => {
   };
 
   if (mode === "modal") {
-    return <span>TODO!</span>;
+    return (
+      <Dialog>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogContent>
+          <LoginForm />
+        </DialogContent>
+      </Dialog>
+    );
   }
   return (
     <span className="cursor-pointer" onClick={onClick}>

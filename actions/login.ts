@@ -18,7 +18,10 @@ import { AuthError } from "next-auth";
 import * as z from "zod";
 
 // to login an user
-export const login = async (values: z.infer<typeof loginSchema>) => {
+export const login = async (
+  values: z.infer<typeof loginSchema>,
+  callbackUrl?: string | null
+) => {
   const validateFields = loginSchema.safeParse(values);
 
   if (!validateFields.success) {
@@ -96,7 +99,7 @@ export const login = async (values: z.infer<typeof loginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: LOGIN_REDIRECT_URL,
+      redirectTo: callbackUrl || LOGIN_REDIRECT_URL,
     });
 
     console.log("Sign in success");

@@ -34,7 +34,8 @@ const LoginForm = () => {
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Account already linked with another provider"
       : "";
-  console.log("OAUTH", OAuthError);
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -50,7 +51,7 @@ const LoginForm = () => {
     setIsError("");
     setIsSuccess("");
     startTransition(async () => {
-      login(values).then((res) => {
+      login(values, callbackUrl).then((res) => {
         if (res.success) {
           form.reset();
           setIsSuccess(res.success);

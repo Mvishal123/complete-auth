@@ -25,9 +25,17 @@ export default auth((req) => {
   if (isAuthApiRoute) return null;
 
   if (isProtectedRoute && !isLoggedIn) {
-    console.log("In here");
+    let callbackUrl = nextUrl.pathname;
 
-    return NextResponse.redirect(new URL(NOT_LOGIN_REDIRECT_URL, nextUrl));
+    if (nextUrl.search) {
+      callbackUrl += nextUrl.search;
+    }
+
+    const encodedUrl = encodeURIComponent(callbackUrl);
+
+    return NextResponse.redirect(
+      new URL(NOT_LOGIN_REDIRECT_URL + `?callbackUrl=${encodedUrl}`, nextUrl)
+    );
   }
 
   if (isAuthRoute && isLoggedIn) {

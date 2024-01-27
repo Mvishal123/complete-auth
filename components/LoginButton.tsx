@@ -3,14 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LoginForm from "./auth/LoginForm";
 
 interface LoginButtonProps {
@@ -29,7 +22,7 @@ const LoginButton = ({ children, asChild, mode }: LoginButtonProps) => {
     return (
       <Dialog>
         <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent>
+        <DialogContent className="py-0 m-0">
           <LoginForm />
         </DialogContent>
       </Dialog>

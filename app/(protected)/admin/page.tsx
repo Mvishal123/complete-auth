@@ -5,12 +5,12 @@ import { ErrorMessage, SuccessMessage } from "@/components/StatusMessage";
 import Rolegate from "@/components/auth/role-gate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getClientUserRole } from "@/lib/client-user-role";
+import { useGetClientUserRole } from "@/lib/client-user-role";
 import React from "react";
 import { toast } from "sonner";
 
 const Adminpage = () => {
-  const userRole = getClientUserRole();
+  const userRole = useGetClientUserRole();
 
   const onAPIButtonClick = () => {
     fetch("api/admin")

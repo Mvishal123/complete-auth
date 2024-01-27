@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 
-export const getClientSession = () => {
+export const useGetClientSession = () => {
   const session = useSession();
 
   return session?.data?.user;

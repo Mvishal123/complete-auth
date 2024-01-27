@@ -30,7 +30,7 @@ const VerifyEmailForm = () => {
 
   useEffect(() => {
     onSubmit();
-  }, [token]);
+  }, [token, onSubmit]);
 
   return (
     <CardWrapper

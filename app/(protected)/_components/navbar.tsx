@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getClientSession } from "@/lib/client-session";
+import { useGetClientSession } from "@/lib/client-session";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProfileButton from "./profile-button";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const session = getClientSession();
+  const session = useGetClientSession();
 
   const NAV_LINKS = [
     {

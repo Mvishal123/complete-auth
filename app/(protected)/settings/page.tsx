@@ -1,6 +1,6 @@
 "use client";
 
-import { getClientSession } from "@/lib/client-session";
+import { useGetClientSession } from "@/lib/client-session";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -34,7 +34,7 @@ import { UserRole } from "@prisma/client";
 import { ErrorMessage, SuccessMessage } from "@/components/StatusMessage";
 
 const SettingsPage = () => {
-  const session = getClientSession();
+  const session = useGetClientSession();
   const { update } = useSession(); // to update client session
 
   const [success, setSuccess] = useState<string | undefined>();

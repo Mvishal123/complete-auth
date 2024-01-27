@@ -14,12 +14,12 @@ export const sendTwoFactorAuthenticationEmail = async (
   });
 };
 
-const NEXT_APP_PUBLIC_URL = process.env.NEXT_APP_PUBLIC_URL
-console.log({NEXT_APP_PUBLIC_URL});
+const domain = process.env.NEXT_PUBLIC_APP_URL
+console.log({domain});
 
 
 export const sendVerificationMail = async (email: string, token: string) => {
-  const VERIFY_TOKEN_URL = `${NEXT_APP_PUBLIC_URL}/auth/verify?new_token=${token}`;
+  const VERIFY_TOKEN_URL = `${domain}/auth/verify?new_token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
@@ -30,7 +30,7 @@ export const sendVerificationMail = async (email: string, token: string) => {
 };
 
 export const sendResetPasswordMail = async (email: string, token: string) => {
-  const RESET_TOKEN_URL = `${NEXT_APP_PUBLIC_URL}/auth/reset-password/reset?new_token=${token}`;
+  const RESET_TOKEN_URL = `${domain}/auth/reset-password/reset?new_token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
